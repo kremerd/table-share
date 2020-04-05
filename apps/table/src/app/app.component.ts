@@ -1,8 +1,10 @@
 import { CdkDragEnd } from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
+import { select, Store } from '@ngrx/store';
 import { BoardItem } from '@table-share/api-interfaces';
-import { Socket } from 'ngx-socket-io';
 import { Observable } from 'rxjs';
+import { loadBoardItems, updateBoardItem } from './board-items/board-items.actions';
+import { selectBoardItems } from './board-items/board-items.selectors';
 
 @Component({
   selector: 'table-share-root',
@@ -11,18 +13,18 @@ import { Observable } from 'rxjs';
 })
 export class AppComponent implements OnInit {
   constructor(
-    private socket: Socket
+    private store: Store
   ) {}
 
   boardItems$: Observable<BoardItem[]>;
 
   ngOnInit(): void {
-    this.boardItems$ = this.socket.fromEvent<BoardItem[]>('boardItems');
-    this.socket.emit('getBoardItems');
+    this.boardItems$ = this.store.pipe(select(selectBoardItems));
+    this.store.dispatch(loadBoardItems());
   }
 
-  drop(boardItem: BoardItem, event: CdkDragEnd<void>): void {
+  onDragEnd(boardItem: BoardItem, event: CdkDragEnd<void>): void {
     const { x, y } = event.source.getFreeDragPosition();
-    this.socket.emit('updateBoardItem', { ...boardItem, x, y });
+    this.store.dispatch(updateBoardItem({ boardItem: { ...boardItem, x, y } }));
   }
 }
