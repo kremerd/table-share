@@ -1,9 +1,7 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
-import { Message } from '@table-share/api-interfaces';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { BoardItem } from '@table-share/api-interfaces';
 import { Socket } from 'ngx-socket-io';
-import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 @Component({
@@ -13,23 +11,26 @@ import { tap } from 'rxjs/operators';
 })
 export class AppComponent implements OnInit {
   constructor(
-    private http: HttpClient,
     private socket: Socket
   ) {}
 
-  form = new FormGroup({
-    message: new FormControl('')
-  });
-
-  socketResult$: Observable<Message>;
+  form = new FormArray([
+    new FormGroup({
+      type: new FormControl('EMPTY'),
+      x: new FormControl(0),
+      y: new FormControl(0)
+    })
+  ]);
 
   ngOnInit(): void {
-    this.socket.fromEvent<Message>('message').pipe(
-      tap(message => this.form.setValue(message, { emitEvent: false }))
+    this.socket.fromEvent<BoardItem[]>('boardItems').pipe(
+      tap(items => this.form.setValue(items, { emitEvent: false }))
     ).subscribe();
 
     this.form.valueChanges.pipe(
-      tap(message => this.socket.emit('message', message))
+      tap(items => this.socket.emit('updateBoardItems', items))
     ).subscribe();
+
+    this.socket.emit('getBoardItems');
   }
 }
