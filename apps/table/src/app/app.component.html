@@ -1,7 +1,6 @@
-<form [formGroup]="form">
-  <ng-container formGroupName="0">
-    <input type="text" formControlName="type">
-    <input type="number" formControlName="x">
-    <input type="number" formControlName="y">
-  </ng-container>
-</form>
+<div class="table">
+  <div class="table-item" *ngFor="let boardItem of boardItems$ | async"
+    cdkDrag [cdkDragFreeDragPosition]="boardItem" (cdkDragEnded)="drop($event)"
+  >
+  </div>
+</div>

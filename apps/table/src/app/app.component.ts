@@ -1,8 +1,8 @@
+import { CdkDragEnd } from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { BoardItem } from '@table-share/api-interfaces';
 import { Socket } from 'ngx-socket-io';
-import { tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'table-share-root',
@@ -14,23 +14,15 @@ export class AppComponent implements OnInit {
     private socket: Socket
   ) {}
 
-  form = new FormArray([
-    new FormGroup({
-      type: new FormControl('EMPTY'),
-      x: new FormControl(0),
-      y: new FormControl(0)
-    })
-  ]);
+  boardItems$: Observable<BoardItem[]>;
 
   ngOnInit(): void {
-    this.socket.fromEvent<BoardItem[]>('boardItems').pipe(
-      tap(items => this.form.setValue(items, { emitEvent: false }))
-    ).subscribe();
-
-    this.form.valueChanges.pipe(
-      tap(items => this.socket.emit('updateBoardItems', items))
-    ).subscribe();
-
+    this.boardItems$ = this.socket.fromEvent<BoardItem>('boardItems');
     this.socket.emit('getBoardItems');
+  }
+
+  drop(event: CdkDragEnd<void>): void {
+    const { x, y } = event.source.getFreeDragPosition();
+    this.socket.emit('updateBoardItems', [{ type: 'DEFAULT', x, y }]);
   }
 }
