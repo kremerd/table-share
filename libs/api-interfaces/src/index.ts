@@ -1,3 +1,3 @@
-export * from './lib/api-interfaces';
 export * from './lib/board-item';
+export * from './lib/utils';
 

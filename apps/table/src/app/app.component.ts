@@ -17,12 +17,12 @@ export class AppComponent implements OnInit {
   boardItems$: Observable<BoardItem[]>;
 
   ngOnInit(): void {
-    this.boardItems$ = this.socket.fromEvent<BoardItem>('boardItems');
+    this.boardItems$ = this.socket.fromEvent<BoardItem[]>('boardItems');
     this.socket.emit('getBoardItems');
   }
 
-  drop(event: CdkDragEnd<void>): void {
+  drop(boardItem: BoardItem, event: CdkDragEnd<void>): void {
     const { x, y } = event.source.getFreeDragPosition();
-    this.socket.emit('updateBoardItems', [{ type: 'DEFAULT', x, y }]);
+    this.socket.emit('updateBoardItems', [{ ...boardItem, x, y }]);
   }
 }

@@ -1,6 +1,6 @@
 <div class="table">
   <div class="table-item" *ngFor="let boardItem of boardItems$ | async"
-    cdkDrag [cdkDragFreeDragPosition]="boardItem" (cdkDragEnded)="drop($event)"
+    cdkDrag [cdkDragFreeDragPosition]="boardItem" (cdkDragEnded)="drop(boardItem, $event)"
   >
   </div>
 </div>

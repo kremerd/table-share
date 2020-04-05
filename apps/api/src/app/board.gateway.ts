@@ -1,12 +1,12 @@
 import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway, WsResponse } from '@nestjs/websockets';
-import { BoardItem } from '@table-share/api-interfaces';
+import { BoardItem, generateRandomId } from '@table-share/api-interfaces';
 import { Socket } from 'socket.io';
 
 @WebSocketGateway()
 export class BoardGateway {
 
   items: BoardItem[] = [
-    { type: 'card', x: 12, y: 42 }
+    { id: generateRandomId(), type: 'card', x: 12, y: 42 }
   ];
 
   @SubscribeMessage('getBoardItems')
