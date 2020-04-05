@@ -5,19 +5,34 @@ import { Socket } from 'socket.io';
 @WebSocketGateway()
 export class BoardGateway {
 
-  items: BoardItem[] = [
-    { id: generateRandomId(), type: 'card', x: 12, y: 42 }
+  boardItems: BoardItem[] = [
+    { id: generateRandomId(), type: 'card', x: 12, y: 42 },
+    { id: generateRandomId(), type: 'card', x: 52, y: 42 }
   ];
 
   @SubscribeMessage('getBoardItems')
   onBoardItems(): WsResponse<BoardItem[]> {
-    return { event: 'boardItems', data: this.items }
+    return { event: 'boardItems', data: this.boardItems }
   }
 
-  @SubscribeMessage('updateBoardItems')
-  onUpdateBoardItems(@ConnectedSocket() client: Socket, @MessageBody() items: BoardItem[]): void {
-    this.items = items;
-    client.broadcast.emit('boardItems', items);
+  @SubscribeMessage('createBoardItem')
+  onCreateBoardItem(@ConnectedSocket() client: Socket, @MessageBody() boardItem: BoardItem): void {
+    this.boardItems = [...this.boardItems, boardItem];
+    client.broadcast.emit('boardItems', this.boardItems);
+  }
+
+  @SubscribeMessage('updateBoardItem')
+  onUpdateBoardItem(@ConnectedSocket() client: Socket, @MessageBody() boardItem: BoardItem): void {
+    const index = this.boardItems.findIndex(item => item.id === boardItem.id);
+    this.boardItems = [...this.boardItems.slice(0, index), boardItem, ...this.boardItems.slice(index + 1)]
+    client.broadcast.emit('boardItems', this.boardItems);
+  }
+
+  @SubscribeMessage('deleteBoardItem')
+  onDeleteBoardItem(@ConnectedSocket() client: Socket, @MessageBody() boardItemId: number): void {
+    const index = this.boardItems.findIndex(item => item.id === boardItemId);
+    this.boardItems = [...this.boardItems.slice(0, index), ...this.boardItems.slice(index + 1)]
+    client.broadcast.emit('boardItems', this.boardItems);
   }
 
 }

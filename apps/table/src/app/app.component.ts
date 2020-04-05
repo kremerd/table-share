@@ -23,6 +23,6 @@ export class AppComponent implements OnInit {
 
   drop(boardItem: BoardItem, event: CdkDragEnd<void>): void {
     const { x, y } = event.source.getFreeDragPosition();
-    this.socket.emit('updateBoardItems', [{ ...boardItem, x, y }]);
+    this.socket.emit('updateBoardItem', { ...boardItem, x, y });
   }
 }
