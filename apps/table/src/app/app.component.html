@@ -1,6 +1,9 @@
-<div class="table">
-  <ts-token *ngFor="let boardItem of boardItems$ | async; trackBy: boardItemTracker"
-    [token]="boardItem" (tokenUpdated)="updateBoardItem($event)"
-  >
-  </ts-token>
+<div class="page">
+  <ts-toolbar></ts-toolbar>
+  <div class="table">
+    <ts-token *ngFor="let boardItem of boardItems$ | async; trackBy: boardItemTracker"
+      [token]="boardItem" (tokenUpdated)="updateBoardItem($event)"
+    >
+    </ts-token>
+  </div>
 </div>

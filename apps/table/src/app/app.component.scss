@@ -1,13 +1,14 @@
-.table {
-  width: 500px;
-  height: 500px;
-  overflow: auto;
-  border: 1px solid black;
+.page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
-.table-item {
-  width: 100px;
-  height: 200px;
-  border-radius: 10px;
-  background-color: green;
+ts-toolbar {
+  z-index: 999;
+}
+
+.table {
+  flex: 1;
+  overflow: hidden;
 }
