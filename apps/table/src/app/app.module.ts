@@ -2,6 +2,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatCardModule } from '@angular/material/card';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { EffectsModule } from '@ngrx/effects';
@@ -12,9 +13,13 @@ import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
 import { BoardItemsEffects } from './board-items/board-items.effects';
 import { boardItemsReducer } from './board-items/board-items.reducer';
+import { TokenComponent } from './token/token.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [
+    AppComponent,
+    TokenComponent
+  ],
   imports: [
     BrowserAnimationsModule,
     BrowserModule,
@@ -24,6 +29,7 @@ import { boardItemsReducer } from './board-items/board-items.reducer';
     ]),
     HttpClientModule,
     ReactiveFormsModule,
+    MatCardModule,
     SocketIoModule.forRoot({ url: environment.wsRoot }),
     StoreModule.forRoot({
       boardItems: boardItemsReducer

@@ -1,4 +1,3 @@
-import { CdkDragEnd } from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { BoardItem } from '@table-share/api-interfaces';
@@ -7,7 +6,7 @@ import { loadBoardItems, updateBoardItem } from './board-items/board-items.actio
 import { selectBoardItems } from './board-items/board-items.selectors';
 
 @Component({
-  selector: 'table-share-root',
+  selector: 'ts-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
@@ -23,8 +22,11 @@ export class AppComponent implements OnInit {
     this.store.dispatch(loadBoardItems());
   }
 
-  onDragEnd(boardItem: BoardItem, event: CdkDragEnd<void>): void {
-    const { x, y } = event.source.getFreeDragPosition();
-    this.store.dispatch(updateBoardItem({ boardItem: { ...boardItem, x, y } }));
+  boardItemTracker(index: number, boardItem: BoardItem): number {
+    return boardItem.id;
+  }
+
+  updateBoardItem(boardItem: BoardItem): void {
+    this.store.dispatch(updateBoardItem({ boardItem }));
   }
 }

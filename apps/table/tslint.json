@@ -1,8 +1,8 @@
 {
   "extends": "../../tslint.json",
   "rules": {
-    "directive-selector": [true, "attribute", "tableShare", "camelCase"],
-    "component-selector": [true, "element", "table-share", "kebab-case"]
+    "directive-selector": [true, "attribute", "ts", "camelCase"],
+    "component-selector": [true, "element", "ts", "kebab-case"]
   },
   "linterOptions": {
     "exclude": ["!**/*"]

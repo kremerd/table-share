@@ -10,7 +10,7 @@
       },
       "root": "apps/table",
       "sourceRoot": "apps/table/src",
-      "prefix": "table-share",
+      "prefix": "ts",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",

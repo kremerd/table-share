@@ -1,6 +1,6 @@
 <div class="table">
-  <div class="table-item" *ngFor="let boardItem of boardItems$ | async"
-    cdkDrag [cdkDragFreeDragPosition]="boardItem" (cdkDragEnded)="onDragEnd(boardItem, $event)"
+  <ts-token *ngFor="let boardItem of boardItems$ | async; trackBy: boardItemTracker"
+    [token]="boardItem" (tokenUpdated)="updateBoardItem($event)"
   >
-  </div>
+  </ts-token>
 </div>

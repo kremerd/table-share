@@ -2,11 +2,17 @@
 @import '~typeface-roboto/index.css';
 @import '~material-design-icons/iconfont/material-icons.css';
 
-html, body {
+html {
   height: 100%;
+  box-sizing: border-box;
 }
 
 body {
+  height: 100%;
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
 }
