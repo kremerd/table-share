@@ -10,20 +10,20 @@
         <div class="header"></div>
       </ng-container>
       <ng-container *ngFor="let token of form.controls; let i = index" [formGroup]="token">
-        <div class="cell">
+        <div class="cell" [@verticalDeflation]>
           <img class="token-image" src="{{ token.value.image }}">
         </div>
-        <div class="cell">
+        <div class="cell" [@verticalDeflation]>
           <mat-form-field>
             <input type="name" matInput formControlName="name">
           </mat-form-field>
         </div>
-        <div class="cell">
+        <div class="cell" [@verticalDeflation]>
           <mat-form-field>
             <input type="number" matInput formControlName="amount">
           </mat-form-field>
         </div>
-        <div class="cell">
+        <div class="cell" [@verticalDeflation]>
           <button mat-icon-button aria-label="Remove row">
             <mat-icon (click)="removeTokenAt(i)">delete</mat-icon>
           </button>

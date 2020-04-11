@@ -23,6 +23,7 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.boardItems$ = this.store.pipe(select(selectBoardItems));
     this.store.dispatch(loadBoardItems());
+    this.dialog.open(AddDialogComponent, { ariaLabel: 'Add tokens to the table', width: '600px' });
   }
 
   boardItemTracker(index: number, boardItem: BoardItem): number {

@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormArray, FormControl, FormGroup } from '@angular/forms';
-import { ReplaySubject, Subject } from 'rxjs';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { AddTokenModel } from '../add-token-model';
+import { verticalDeflation } from '../animations';
 
 @Component({
   selector: 'ts-add-dialog',
   templateUrl: './add-dialog.component.html',
-  styleUrls: ['./add-dialog.component.scss']
+  styleUrls: ['./add-dialog.component.scss'],
+  animations: [verticalDeflation]
 })
 export class AddDialogComponent implements OnInit {
 
