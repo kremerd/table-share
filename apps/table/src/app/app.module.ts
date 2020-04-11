@@ -2,6 +2,12 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -10,6 +16,7 @@ import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { SocketIoModule } from 'ngx-socket-io';
 import { environment } from '../environments/environment';
+import { AddDialogComponent } from './add-dialog/add-dialog.component';
 import { AppComponent } from './app.component';
 import { BoardItemsEffects } from './board-items/board-items.effects';
 import { boardItemsReducer } from './board-items/board-items.reducer';
@@ -18,6 +25,7 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
 
 @NgModule({
   declarations: [
+    AddDialogComponent,
     AppComponent,
     TokenComponent,
     ToolbarComponent
@@ -30,8 +38,14 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
       BoardItemsEffects
     ]),
     HttpClientModule,
-    ReactiveFormsModule,
+    MatButtonModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    MatTableModule,
     MatToolbarModule,
+    ReactiveFormsModule,
     SocketIoModule.forRoot({ url: environment.wsRoot }),
     StoreModule.forRoot({
       boardItems: boardItemsReducer

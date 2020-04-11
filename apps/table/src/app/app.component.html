@@ -5,5 +5,8 @@
       [token]="boardItem" (tokenUpdated)="updateBoardItem($event)"
     >
     </ts-token>
+    <button class="add-button" mat-fab aria-label="Add board item" (click)="addBoardItem()">
+      <mat-icon>add</mat-icon>
+    </button>
   </div>
 </div>

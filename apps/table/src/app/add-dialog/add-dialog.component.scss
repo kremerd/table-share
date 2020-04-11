@@ -1,0 +1,26 @@
+table {
+  width: 100%;
+}
+
+.mat-column-image > img {
+  display: block;
+  max-height: 100px;
+}
+
+/* Material customization */
+
+th.mat-header-cell:first-of-type, td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type {
+  padding-left: 4px;
+}
+
+th.mat-header-cell, td.mat-cell, td.mat-footer-cell {
+  padding: 4px;
+}
+
+th.mat-header-cell:last-of-type, td.mat-cell:last-of-type, td.mat-footer-cell:last-of-type {
+  padding-right: 4px;
+}
+
+input.mat-input-element {
+  height: 1.2em;
+}

@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { select, Store } from '@ngrx/store';
 import { BoardItem } from '@table-share/api-interfaces';
 import { Observable } from 'rxjs';
+import { AddDialogComponent } from './add-dialog/add-dialog.component';
 import { loadBoardItems, updateBoardItem } from './board-items/board-items.actions';
 import { selectBoardItems } from './board-items/board-items.selectors';
 
@@ -12,6 +14,7 @@ import { selectBoardItems } from './board-items/board-items.selectors';
 })
 export class AppComponent implements OnInit {
   constructor(
+    private dialog: MatDialog,
     private store: Store
   ) {}
 
@@ -24,6 +27,10 @@ export class AppComponent implements OnInit {
 
   boardItemTracker(index: number, boardItem: BoardItem): number {
     return boardItem.id;
+  }
+
+  addBoardItem(): void {
+    this.dialog.open(AddDialogComponent);
   }
 
   updateBoardItem(boardItem: BoardItem): void {
