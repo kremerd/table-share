@@ -1,0 +1,28 @@
+$table-border-color: rgba(0,0,0,.12);
+
+@mixin table-grid($cols) {
+  display: grid;
+
+  & > * {
+    padding: 4px;
+    border-bottom: 1px solid $table-border-color;
+
+    @for $i from 1 through $cols {
+      &:nth-last-child(#{$i}) {
+        border-bottom: none;
+      }
+    }
+  }
+
+  .header {
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(0,0,0,.54);
+  }
+
+  .cell {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+  }
+}

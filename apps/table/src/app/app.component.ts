@@ -30,7 +30,7 @@ export class AppComponent implements OnInit {
   }
 
   addBoardItem(): void {
-    this.dialog.open(AddDialogComponent);
+    this.dialog.open(AddDialogComponent, { ariaLabel: 'Add tokens to the table', width: '600px' });
   }
 
   updateBoardItem(boardItem: BoardItem): void {

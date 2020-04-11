@@ -36,18 +36,12 @@ export class AddDialogComponent implements OnInit {
     })
   ]);
 
-  formEntries: Subject<AbstractControl[]> = new ReplaySubject(1);
-
-  columnsToDisplay = ['image', 'name', 'amount', 'actions'];
-
   ngOnInit(): void {
     this.form.setValue(this.tokens);
-    this.formEntries.next(this.form.controls);
   }
 
   removeTokenAt(index: number): void {
     this.form.removeAt(index);
-    this.formEntries.next(this.form.controls);
   }
 
 }
