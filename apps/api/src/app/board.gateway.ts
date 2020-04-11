@@ -6,8 +6,22 @@ import { Socket } from 'socket.io';
 export class BoardGateway {
 
   boardItems: BoardItem[] = [
-    { id: generateRandomId(), type: 'card', x: 12, y: 42 },
-    { id: generateRandomId(), type: 'card', x: 52, y: 42 }
+    {
+      type: 'token',
+      id: generateRandomId(),
+      name: 'Initial queen',
+      image: 'https://upload.wikimedia.org/wikipedia/commons/c/ca/English_pattern_queen_of_spades.svg',
+      x: 12,
+      y: 42
+    },
+    {
+      type: 'token',
+      id: generateRandomId(),
+      name: 'Initial king',
+      image: 'https://upload.wikimedia.org/wikipedia/commons/f/f1/English_pattern_king_of_spades.svg',
+      x: 52,
+      y: 42
+    }
   ];
 
   @SubscribeMessage('getBoardItems')

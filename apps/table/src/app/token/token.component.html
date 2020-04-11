@@ -2,5 +2,5 @@
   cdkDrag (cdkDragStarted)="onDragStarted($event)" (cdkDragEnded)="onDragEnd($event)"
   [cdkDragFreeDragPosition]="token"
 >
-  <img class="content" src="https://upload.wikimedia.org/wikipedia/commons/f/f1/English_pattern_king_of_spades.svg">
+  <img class="content" [src]="token.image" [alt]="token.name">
 </div>

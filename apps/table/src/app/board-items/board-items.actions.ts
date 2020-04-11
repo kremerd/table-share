@@ -12,7 +12,7 @@ export const updateBoardItems = createAction(
 
 export const createBoardItem = createAction(
   '[BoardItems] Create',
-  props<{ boardItem?: Partial<BoardItem> }>()
+  props<{ boardItem: BoardItem }>()
 );
 
 export const updateBoardItem = createAction(

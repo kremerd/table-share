@@ -1,5 +1,5 @@
 import { Action, createReducer, on } from '@ngrx/store';
-import { BoardItem, generateRandomId } from '@table-share/api-interfaces';
+import { BoardItem } from '@table-share/api-interfaces';
 import { createBoardItem, deleteBoardItem, updateBoardItem, updateBoardItems } from './board-items.actions';
 
 export const reducer = createReducer<BoardItem[]>([],
@@ -7,10 +7,7 @@ export const reducer = createReducer<BoardItem[]>([],
   on(updateBoardItems, (_, { boardItems }) => boardItems),
 
   on(createBoardItem, (boardItems, { boardItem }) => {
-    return [
-      ...boardItems,
-      { id: generateRandomId(), type: 'DEFAULT', x: 0, y: 0, ...boardItem }
-    ]
+    return [...boardItems, boardItem];
   }),
 
   on(updateBoardItem, (boardItems, { boardItem }) => {

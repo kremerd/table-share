@@ -1,6 +1,6 @@
 import { CdkDragEnd, CdkDragStart } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { BoardItem } from '@table-share/api-interfaces';
+import { Token } from '@table-share/api-interfaces';
 
 @Component({
   selector: 'ts-token',
@@ -12,10 +12,10 @@ export class TokenComponent implements OnInit {
   constructor() { }
 
   @Input()
-  token: BoardItem;
+  token: Token;
 
   @Output()
-  tokenUpdated: EventEmitter<BoardItem> = new EventEmitter();
+  tokenUpdated: EventEmitter<Token> = new EventEmitter();
 
   dragged: boolean = false;
 
