@@ -5,7 +5,7 @@ import { BoardItem, Token } from '@table-share/api-interfaces';
 import { Observable } from 'rxjs';
 import { filter, tap } from 'rxjs/operators';
 import { AddDialogComponent } from './add-dialog/add-dialog.component';
-import { createBoardItem, loadBoardItems, updateBoardItem } from './board-items/board-items.actions';
+import { createBoardItem, loadBoardItems } from './board-items/board-items.actions';
 import { selectBoardItems } from './board-items/board-items.selectors';
 
 @Component({
@@ -44,9 +44,5 @@ export class AppComponent implements OnInit {
       position: { top: '70px' }
     };
     return this.dialog.open(AddDialogComponent, dialogConfig);
-  }
-
-  updateBoardItem(boardItem: BoardItem): void {
-    this.store.dispatch(updateBoardItem({ boardItem }));
   }
 }

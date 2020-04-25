@@ -10,6 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ReactiveComponentModule } from '@ngrx/component';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
@@ -43,6 +44,7 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
     MatIconModule,
     MatInputModule,
     MatToolbarModule,
+    ReactiveComponentModule,
     ReactiveFormsModule,
     SocketIoModule.forRoot({ url: environment.wsRoot }),
     StoreModule.forRoot({
