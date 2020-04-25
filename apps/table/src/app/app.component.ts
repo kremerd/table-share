@@ -21,7 +21,7 @@ interface ComponentModel {
 })
 export class AppComponent extends RxState<ComponentModel> implements OnInit {
 
-  addClick = new Subject<MouseEvent>();
+  addClick = new Subject<void>();
 
   constructor(private dialog: MatDialog, private store: Store) {
     super();

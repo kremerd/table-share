@@ -4,9 +4,8 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { RxState } from '@rx-angular/state';
 import { Token, TokenGroup } from '@table-share/api-interfaces';
-import { removeByIndex } from '@table-share/util';
+import { removeByIndex, selectFormIfValid } from '@table-share/util';
 import { Subject } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
 import { verticalDeflation } from '../animations';
 import { createTokens } from '../board-items/board-items.actions';
 
@@ -46,9 +45,7 @@ export class AddDialogComponent extends RxState<ComponentModel> {
     });
 
     const submitValidForm$ = this.submitForm.pipe(
-      map(() => this.get().form),
-      filter(form => form.valid),
-      map(form => form.value as TokenGroup[])
+      selectFormIfValid<TokenGroup[]>(() => this.get().form)
     );
 
     this.hold(submitValidForm$, tokenGroups => this.store.dispatch(createTokens({ tokenGroups })));
