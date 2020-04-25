@@ -1,5 +1,6 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { BoardItem } from '@table-share/api-interfaces';
+import { removeById, updateById } from '@table-share/util';
 import { createBoardItem, deleteBoardItem, updateBoardItem, updateBoardItems } from './board-items.actions';
 
 export const reducer = createReducer<BoardItem[]>([],
@@ -11,13 +12,11 @@ export const reducer = createReducer<BoardItem[]>([],
   }),
 
   on(updateBoardItem, (boardItems, { boardItem }) => {
-    const index = boardItems.findIndex(item => item.id === boardItem.id);
-    return [...boardItems.slice(0, index), boardItem, ...boardItems.slice(index + 1)];
+    return updateById(boardItems, boardItem);
   }),
 
   on(deleteBoardItem, (boardItems, { boardItemId }) => {
-    const index = boardItems.findIndex(item => item.id === boardItemId);
-    return [...boardItems.slice(0, index), ...boardItems.slice(index + 1)];
+    return removeById(boardItems, boardItemId);
   })
 
 );

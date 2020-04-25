@@ -2,7 +2,8 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { RxState } from '@rx-angular/state';
-import { generateRandomId, Token } from '@table-share/api-interfaces';
+import { Token } from '@table-share/api-interfaces';
+import { generateRandomId, removeByIndex } from '@table-share/util';
 import { Subject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { verticalDeflation } from '../animations';
@@ -38,8 +39,8 @@ export class AddDialogComponent extends RxState<ComponentModel> {
     this.set({ form: this.buildForm(this.tokenGroups) });
 
     this.connect(this.removeTokenAt, (vm, index) => {
-      const controls = [...vm.form.controls.slice(0, index), ...vm.form.controls.slice(index + 1)];
-      return { form: new FormArray(controls) };
+      const controls = removeByIndex(vm.form.controls, index);
+      return { form: this.formBuilder.array(controls) };
     });
 
     const submitValidForm$ = this.submitForm.pipe(
@@ -51,8 +52,8 @@ export class AddDialogComponent extends RxState<ComponentModel> {
     this.hold(submitValidForm$, tokens => this.dialog.close(tokens));
   }
 
-  private buildForm(tokens: TokenGroup[]): FormArray {
-    const formGroups = tokens.map(token => this.buildFormGroup(token))
+  private buildForm(tokenGroups: TokenGroup[]): FormArray {
+    const formGroups = tokenGroups.map(token => this.buildFormGroup(token))
     return this.formBuilder.array(formGroups);
   }
 
