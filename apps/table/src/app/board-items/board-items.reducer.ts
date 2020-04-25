@@ -21,5 +21,5 @@ export const reducer = createReducer<BoardItem[]>([],
 
 );
 
-export const boardItemsReducer = (state: BoardItem[], action: Action) =>
+export const boardItemsReducer = (state: BoardItem[] | undefined, action: Action) =>
   reducer(state, action);
