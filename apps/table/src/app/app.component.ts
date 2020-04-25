@@ -1,40 +1,43 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { select, Store } from '@ngrx/store';
+import { RxState } from '@rx-angular/state';
 import { BoardItem, Token } from '@table-share/api-interfaces';
-import { Observable } from 'rxjs';
-import { filter, tap } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { filter, map, mergeMap } from 'rxjs/operators';
 import { AddDialogComponent } from './add-dialog/add-dialog.component';
 import { createBoardItem, loadBoardItems } from './board-items/board-items.actions';
 import { selectBoardItems } from './board-items/board-items.selectors';
+
+interface ComponentModel {
+  boardItems: BoardItem[];
+}
 
 @Component({
   selector: 'ts-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
-  constructor(
-    private dialog: MatDialog,
-    private store: Store
-  ) {}
+export class AppComponent extends RxState<ComponentModel> implements OnInit {
 
-  boardItems$: Observable<BoardItem[]>;
+  addClick = new Subject<MouseEvent>();
 
-  ngOnInit(): void {
-    this.boardItems$ = this.store.pipe(select(selectBoardItems));
-    this.store.dispatch(loadBoardItems());
+  constructor(private dialog: MatDialog, private store: Store) {
+    super();
+
+    this.connect(store.pipe(
+      select(selectBoardItems),
+      map(boardItems => ({ boardItems }))
+    ));
+
+    this.hold(this.showModalOnAddClick(), boardItems => this.createBoardItems(boardItems));
   }
 
-  boardItemTracker(index: number, boardItem: BoardItem): number {
-    return boardItem.id;
-  }
-
-  addBoardItem(): void {
-    this.openAddDialog().afterClosed().pipe(
-      filter(result => result !== undefined),
-      tap(tokens => tokens.forEach(token => this.store.dispatch(createBoardItem({ boardItem: token }))))
-    ).subscribe();
+  private showModalOnAddClick(): Observable<BoardItem[]> {
+    return this.addClick.pipe(
+      map(() => this.openAddDialog()),
+      mergeMap(dialog => dialog.afterClosed().pipe(filter(res => res !== undefined)))
+    );
   }
 
   private openAddDialog(): MatDialogRef<AddDialogComponent, Token[] | undefined> {
@@ -45,4 +48,19 @@ export class AppComponent implements OnInit {
     };
     return this.dialog.open(AddDialogComponent, dialogConfig);
   }
+
+  private createBoardItems(boardItems: BoardItem[]): void {
+    for (const boardItem of boardItems) {
+      this.store.dispatch(createBoardItem({ boardItem }));
+    }
+  }
+
+  ngOnInit(): void {
+    this.store.dispatch(loadBoardItems());
+  }
+
+  boardItemTracker(index: number, boardItem: BoardItem): number {
+    return boardItem.id;
+  }
+
 }
