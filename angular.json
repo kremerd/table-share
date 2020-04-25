@@ -4,6 +4,11 @@
     "table": {
       "projectType": "application",
       "schematics": {
+        "@schematics/angular": {
+          "component": {
+            "changeDetection": "OnPush"
+          }
+        },
         "@nrwl/angular:component": {
           "style": "scss"
         }

@@ -1,5 +1,5 @@
 import { CdkDragEnd, CdkDragStart } from '@angular/cdk/drag-drop';
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { RxState } from '@rx-angular/state';
 import { Token } from '@table-share/api-interfaces';
@@ -15,11 +15,11 @@ interface ComponentModel {
 @Component({
   selector: 'ts-token',
   templateUrl: './token.component.html',
-  styleUrls: ['./token.component.scss']
+  styleUrls: ['./token.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TokenComponent extends RxState<ComponentModel> {
 
-  // TODO: Make observable
   @Input()
   set token(token: Token) {
     this.set({ token });

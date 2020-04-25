@@ -1,4 +1,4 @@
-<form [formGroup]="form" (submit)="submitForm()">
+<form *ngrxLet="$; let vm" [formGroup]="vm.form" (submit)="submitForm.next()">
   <h2 mat-dialog-title>Add tokens to the table</h2>
 
   <mat-dialog-content>
@@ -9,7 +9,7 @@
         <div class="header">Amount</div>
         <div class="header"></div>
       </ng-container>
-      <ng-container *ngFor="let token of form.controls; let i = index" [formGroup]="token">
+      <ng-container *ngFor="let token of vm.form.controls; let i = index" [formGroup]="token">
         <div class="cell" [@verticalDeflation]>
           <img class="token-image" src="{{ token.value.image }}">
         </div>
@@ -21,13 +21,13 @@
         <div class="cell" [@verticalDeflation]>
           <mat-form-field>
             <input type="number" matInput formControlName="amount">
-            <mat-error *ngIf="form.controls[i].get('amount').hasError('min')">Enter at least 0.</mat-error>
-            <mat-error *ngIf="form.controls[i].get('amount').hasError('max')">Enter at most 16.</mat-error>
+            <mat-error *ngIf="vm.form.controls[i].get('amount').hasError('min')">Enter at least 0.</mat-error>
+            <mat-error *ngIf="vm.form.controls[i].get('amount').hasError('max')">Enter at most 16.</mat-error>
           </mat-form-field>
         </div>
         <div class="cell" [@verticalDeflation]>
           <button type="button" mat-icon-button aria-label="Remove row">
-            <mat-icon (click)="removeTokenAt(i)">delete</mat-icon>
+            <mat-icon (click)="removeTokenAt.next(i)">delete</mat-icon>
           </button>
         </div>
       </ng-container>

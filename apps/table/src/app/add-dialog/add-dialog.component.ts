@@ -1,22 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
+import { RxState } from '@rx-angular/state';
 import { generateRandomId, Token } from '@table-share/api-interfaces';
+import { Subject } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { verticalDeflation } from '../animations';
 import { TokenEssentials, TokenGroup } from './token-group';
+
+interface ComponentModel {
+  form: FormArray;
+}
 
 @Component({
   selector: 'ts-add-dialog',
   templateUrl: './add-dialog.component.html',
   styleUrls: ['./add-dialog.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [verticalDeflation]
 })
-export class AddDialogComponent implements OnInit {
-
-  constructor(
-    private dialog: MatDialogRef<AddDialogComponent, Token[] | undefined>,
-    private formBuilder: FormBuilder
-  ) { }
+export class AddDialogComponent extends RxState<ComponentModel> {
 
   private tokenGroups: TokenGroup[] = [
     { image: 'https://upload.wikimedia.org/wikipedia/commons/4/4f/English_pattern_jack_of_spades.svg', name: 'Jack', amount: 1 },
@@ -24,10 +27,28 @@ export class AddDialogComponent implements OnInit {
     { image: 'https://upload.wikimedia.org/wikipedia/commons/f/f1/English_pattern_king_of_spades.svg', name: 'King', amount: 3 }
   ];
 
-  form: FormArray;
+  removeTokenAt = new Subject<number>();
+  submitForm = new Subject<void>();
 
-  ngOnInit(): void {
-    this.form = this.buildForm(this.tokenGroups);
+  constructor(
+    private dialog: MatDialogRef<AddDialogComponent, Token[] | undefined>,
+    private formBuilder: FormBuilder
+  ) {
+    super();
+    this.set({ form: this.buildForm(this.tokenGroups) });
+
+    this.connect(this.removeTokenAt, (vm, index) => {
+      const controls = [...vm.form.controls.slice(0, index), ...vm.form.controls.slice(index + 1)];
+      return { form: new FormArray(controls) };
+    });
+
+    const submitValidForm$ = this.submitForm.pipe(
+      map(() => this.get().form),
+      filter(form => form.valid),
+      map(form => this.generateTokens(form.value))
+    );
+
+    this.hold(submitValidForm$, tokens => this.dialog.close(tokens));
   }
 
   private buildForm(tokens: TokenGroup[]): FormArray {
@@ -41,19 +62,6 @@ export class AddDialogComponent implements OnInit {
       name: [token.name],
       amount: [token.amount, [Validators.min(0), Validators.max(16)]]
     });
-  }
-
-  removeTokenAt(index: number): void {
-    this.form.removeAt(index);
-  }
-
-  submitForm(): void {
-    if (this.form.invalid) {
-      return;
-    }
-
-    const tokens = this.generateTokens(this.form.value);
-    this.dialog.close(tokens);
   }
 
   private generateTokens(tokenGroups: TokenGroup[]): Token[] {
