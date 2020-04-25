@@ -1,13 +1,14 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
+import { Store } from '@ngrx/store';
 import { RxState } from '@rx-angular/state';
-import { Token } from '@table-share/api-interfaces';
-import { generateRandomId, removeByIndex } from '@table-share/util';
+import { Token, TokenGroup } from '@table-share/api-interfaces';
+import { removeByIndex } from '@table-share/util';
 import { Subject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { verticalDeflation } from '../animations';
-import { TokenEssentials, TokenGroup } from './token-group';
+import { createTokens } from '../board-items/board-items.actions';
 
 interface ComponentModel {
   form: FormArray;
@@ -33,7 +34,8 @@ export class AddDialogComponent extends RxState<ComponentModel> {
 
   constructor(
     private dialog: MatDialogRef<AddDialogComponent, Token[] | undefined>,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private store: Store
   ) {
     super();
     this.set({ form: this.buildForm(this.tokenGroups) });
@@ -46,10 +48,11 @@ export class AddDialogComponent extends RxState<ComponentModel> {
     const submitValidForm$ = this.submitForm.pipe(
       map(() => this.get().form),
       filter(form => form.valid),
-      map(form => this.generateTokens(form.value))
+      map(form => form.value as TokenGroup[])
     );
 
-    this.hold(submitValidForm$, tokens => this.dialog.close(tokens));
+    this.hold(submitValidForm$, tokenGroups => this.store.dispatch(createTokens({ tokenGroups })));
+    this.hold(submitValidForm$, () => this.dialog.close());
   }
 
   private buildForm(tokenGroups: TokenGroup[]): FormArray {
@@ -63,19 +66,6 @@ export class AddDialogComponent extends RxState<ComponentModel> {
       name: [token.name],
       amount: [token.amount, [Validators.min(0), Validators.max(16)]]
     });
-  }
-
-  private generateTokens(tokenGroups: TokenGroup[]): Token[] {
-    return tokenGroups
-      .map(({ name, image, amount }) => Array<TokenEssentials>(amount).fill({ name, image }))
-      .flat()
-      .map((essentials, i) => ({
-        type: 'token',
-        id: generateRandomId(),
-        x: 30 * i,
-        y: 30 * i,
-        ...essentials
-      }));
   }
 
 }

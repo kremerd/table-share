@@ -3,10 +3,10 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { select, Store } from '@ngrx/store';
 import { RxState } from '@rx-angular/state';
 import { BoardItem, Token } from '@table-share/api-interfaces';
-import { Observable, Subject } from 'rxjs';
-import { filter, map, mergeMap } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { AddDialogComponent } from './add-dialog/add-dialog.component';
-import { createBoardItem, loadBoardItems } from './board-items/board-items.actions';
+import { loadBoardItems } from './board-items/board-items.actions';
 import { selectBoardItems } from './board-items/board-items.selectors';
 
 interface ComponentModel {
@@ -31,14 +31,7 @@ export class AppComponent extends RxState<ComponentModel> implements OnInit {
       map(boardItems => ({ boardItems }))
     ));
 
-    this.hold(this.showModalOnAddClick(), boardItems => this.createBoardItems(boardItems));
-  }
-
-  private showModalOnAddClick(): Observable<BoardItem[]> {
-    return this.addClick.pipe(
-      map(() => this.openAddDialog()),
-      mergeMap(dialog => dialog.afterClosed().pipe(filter(res => res !== undefined)))
-    );
+    this.hold(this.addClick, () => this.openAddDialog());
   }
 
   private openAddDialog(): MatDialogRef<AddDialogComponent, Token[] | undefined> {
@@ -48,12 +41,6 @@ export class AppComponent extends RxState<ComponentModel> implements OnInit {
       position: { top: '70px' }
     };
     return this.dialog.open(AddDialogComponent, dialogConfig);
-  }
-
-  private createBoardItems(boardItems: BoardItem[]): void {
-    for (const boardItem of boardItems) {
-      this.store.dispatch(createBoardItem({ boardItem }));
-    }
   }
 
   ngOnInit(): void {
