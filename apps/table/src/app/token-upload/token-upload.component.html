@@ -1,12 +1,13 @@
-<form *ngrxLet="$; let vm" [formGroup]="vm!.form" (ngSubmit)="submitForm.next()">
+<ng-container *ngrxLet="$; let vm">
   <h2 mat-dialog-title>Add tokens</h2>
 
   <mat-dialog-content>
-    Hello World!
+    <ts-dnd-file-upload [maxSize]="MAX_FILE_SIZE" (filesSelected)="filesSelected.next($event)">
+      Drop your token images here.
+    </ts-dnd-file-upload>
   </mat-dialog-content>
 
   <mat-dialog-actions>
     <button type="button" mat-button (click)="cancel.next()">Cancel</button>
-    <button type="submit" mat-button>Proceed</button>
   </mat-dialog-actions>
-</form>
+</ng-container>

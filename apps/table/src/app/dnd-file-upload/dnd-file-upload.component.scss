@@ -1,0 +1,20 @@
+@import '../../variables';
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  height: 300px;
+  justify-content: center;
+  align-items: center;
+  border: 4px dashed mat-color($primary);
+  border-radius: 4px;
+
+  &.dragOver {
+    border-color: mat-color($primary, 800);
+    background-color: mat-color($primary, 100);
+  }
+}
+
+.validation {
+  color: mat-color($warn);
+}

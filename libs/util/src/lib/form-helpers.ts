@@ -8,3 +8,6 @@ export const selectFormIfValid = <T, R = unknown> (controlProducer: (p: R) => Ab
     filter(form => form.valid),
     map(form => form.value as T)
   );
+
+export const fileListToArray = (files: FileList | null | undefined): File[] =>
+  Array.from(files ?? []);

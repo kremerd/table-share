@@ -1,0 +1,12 @@
+<div *ngrxLet="$; let vm"
+  class="panel" [class.dragOver]="vm!.dragOver"
+  (dragenter)="dragEnter.next()" (dragleave)="dragLeave.next()"
+  (dragover)="dragOver.next($event)" (drop)="drop.next($event)"
+>
+  <div>
+    <ng-content></ng-content>
+  </div>
+  <div class="validation" *ngIf="vm!.success === false">
+    Maximum file size allowed: {{ vm!.maxSize | fileSize }}.
+  </div>
+</div>

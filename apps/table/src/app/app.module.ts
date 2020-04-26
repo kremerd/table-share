@@ -20,15 +20,19 @@ import { AddDialogComponent } from './add-dialog/add-dialog.component';
 import { AppComponent } from './app.component';
 import { BoardItemsEffects } from './board-items/board-items.effects';
 import { boardItemsReducer } from './board-items/board-items.reducer';
-import { TokenComponent } from './token/token.component';
-import { ToolbarComponent } from './toolbar/toolbar.component';
+import { DndFileUploadComponent } from './dnd-file-upload/dnd-file-upload.component';
+import { FileSizePipe } from './file-size.pipe';
 import { TokenGroupConfigurationComponent } from './token-group-configuration/token-group-configuration.component';
 import { TokenUploadComponent } from './token-upload/token-upload.component';
+import { TokenComponent } from './token/token.component';
+import { ToolbarComponent } from './toolbar/toolbar.component';
 
 @NgModule({
   declarations: [
     AddDialogComponent,
     AppComponent,
+    DndFileUploadComponent,
+    FileSizePipe,
     TokenComponent,
     ToolbarComponent,
     TokenGroupConfigurationComponent,

@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { RxState } from '@rx-angular/state';
-import { selectFormIfValid } from '@table-share/util';
 import { Subject } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { AddDialogContentMode } from '../add-dialog-content-mode';
 
 interface ComponentModel {
@@ -24,18 +24,18 @@ export class TokenUploadComponent extends RxState<ComponentModel> {
   switchContentMode = new EventEmitter<AddDialogContentMode>();
 
   cancel = new Subject<void>();
-  submitForm = new Subject<void>();
+  filesSelected = new Subject<File[]>();
+
+  readonly MAX_FILE_SIZE = 10 * 1024 * 1024;
 
   constructor() {
     super();
     this.set({ form: new FormGroup({}) });
 
-    const submitValidForm$ = this.submitForm.pipe(
-      selectFormIfValid<void>(() => this.get().form)
-    );
+    const actualFilesSelected$ = this.filesSelected.pipe(filter(files => files.length > 0));
 
     this.hold(this.cancel, () => this.closeDialog.emit());
-    this.hold(submitValidForm$, () => this.switchContentMode.emit('token-group-configuration'));
+    this.hold(actualFilesSelected$, () => this.switchContentMode.emit('token-group-configuration'));
   }
 
 }
