@@ -1,10 +1,12 @@
 <div class="page" *ngrxLet="$; let vm">
   <ts-toolbar></ts-toolbar>
-  <div class="table">
-    <ts-token *ngFor="let boardItem of vm!.boardItems; trackBy: boardItemTracker"
-      [token]="boardItem"
-    >
-    </ts-token>
+  <div class="workspace">
+    <div class="table">
+      <ts-token *ngFor="let boardItem of vm!.boardItems; trackBy: boardItemTracker"
+        [token]="boardItem"
+      >
+      </ts-token>
+    </div>
     <button class="add-button" mat-fab aria-label="Add board item" (click)="addClick.next()">
       <mat-icon>add</mat-icon>
     </button>

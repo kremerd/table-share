@@ -1,11 +1,11 @@
-$table-border-color: rgba(0,0,0,.12);
+@import './variables';
 
 @mixin table-grid($cols) {
   display: grid;
 
   & > * {
     padding: 4px;
-    border-bottom: 1px solid $table-border-color;
+    border-bottom: 1px solid mat-color($foreground, divider);
 
     @for $i from 1 through $cols {
       &:nth-last-child(#{$i}) {
@@ -17,7 +17,7 @@ $table-border-color: rgba(0,0,0,.12);
   .header {
     font-size: 12px;
     font-weight: 500;
-    color: rgba(0,0,0,.54);
+    color: mat-color($foreground, secondary-text);
   }
 
   .cell {

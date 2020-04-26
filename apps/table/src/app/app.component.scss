@@ -8,9 +8,14 @@ ts-toolbar {
   z-index: 999;
 }
 
-.table {
+.workspace {
   flex: 1;
   overflow: hidden;
+}
+
+.table {
+  position: relative;
+  height: 100%;
 }
 
 .add-button {

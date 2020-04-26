@@ -34,7 +34,7 @@ export class AppComponent extends RxState<ComponentModel> implements OnInit {
     this.hold(this.addClick, () => this.openAddDialog());
   }
 
-  private openAddDialog(): MatDialogRef<AddDialogComponent, Token[] | undefined> {
+  private openAddDialog(): MatDialogRef<AddDialogComponent> {
     const dialogConfig = {
       ariaLabel: 'Add tokens to the table',
       width: '600px',

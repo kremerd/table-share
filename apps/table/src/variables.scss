@@ -1,0 +1,10 @@
+@import '~@angular/material/theming';
+
+$primary: mat-palette($mat-orange);
+$accent: mat-palette($mat-deep-purple);
+$warn: mat-palette($mat-deep-orange);
+
+$theme: mat-light-theme($primary, $accent, $warn);
+
+$foreground: map-get($theme, foreground);
+$background: map-get($theme, background);
