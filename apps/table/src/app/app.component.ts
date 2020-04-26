@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { select, Store } from '@ngrx/store';
 import { RxState } from '@rx-angular/state';
-import { BoardItem, Token } from '@table-share/api-interfaces';
+import { BoardItem } from '@table-share/api-interfaces';
 import { Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AddDialogComponent } from './add-dialog/add-dialog.component';
