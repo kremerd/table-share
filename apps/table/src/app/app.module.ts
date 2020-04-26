@@ -22,13 +22,17 @@ import { BoardItemsEffects } from './board-items/board-items.effects';
 import { boardItemsReducer } from './board-items/board-items.reducer';
 import { TokenComponent } from './token/token.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
+import { TokenGroupConfigurationComponent } from './token-group-configuration/token-group-configuration.component';
+import { TokenUploadComponent } from './token-upload/token-upload.component';
 
 @NgModule({
   declarations: [
     AddDialogComponent,
     AppComponent,
     TokenComponent,
-    ToolbarComponent
+    ToolbarComponent,
+    TokenGroupConfigurationComponent,
+    TokenUploadComponent
   ],
   imports: [
     BrowserAnimationsModule,

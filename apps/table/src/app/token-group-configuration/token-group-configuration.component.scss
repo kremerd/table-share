@@ -1,0 +1,18 @@
+@import '../../mixins';
+
+.grid {
+  @include table-grid(4);
+  grid-template-columns: 100px 3fr 1fr 50px;
+  width: 100%;
+}
+
+mat-form-field {
+  width: 100%;
+  min-width: 0;
+}
+
+.token-image {
+  display: block;
+  max-width: 100px;
+  max-height: 100px;
+}

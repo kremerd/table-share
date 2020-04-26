@@ -1,0 +1,41 @@
+<form *ngrxLet="$; let vm" [formGroup]="$any(vm!.form)" (ngSubmit)="submitForm.next()">
+  <h2 mat-dialog-title>Configure tokens</h2>
+
+  <mat-dialog-content>
+    <div class="grid">
+      <ng-container>
+        <div class="header">Token</div>
+        <div class="header">Name</div>
+        <div class="header">Amount</div>
+        <div class="header"></div>
+      </ng-container>
+      <ng-container *ngFor="let token of vm!.form.controls; let i = index" [formArrayName]="i">
+        <div class="cell" [@verticalDeflation]>
+          <img class="token-image" src="{{ token.value.image }}">
+        </div>
+        <div class="cell" [@verticalDeflation]>
+          <mat-form-field>
+            <input type="name" matInput formControlName="name">
+          </mat-form-field>
+        </div>
+        <div class="cell" [@verticalDeflation]>
+          <mat-form-field>
+            <input type="number" matInput formControlName="amount">
+            <mat-error *ngIf="token.get('amount')!.hasError('min')">Enter at least 0.</mat-error>
+            <mat-error *ngIf="token.get('amount')!.hasError('max')">Enter at most 16.</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="cell" [@verticalDeflation]>
+          <button type="button" mat-icon-button aria-label="Remove row">
+            <mat-icon (click)="removeTokenAt.next(i)">delete</mat-icon>
+          </button>
+        </div>
+      </ng-container>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions>
+    <button type="button" mat-button (click)="cancel.next()">Back</button>
+    <button type="submit" mat-button>Accept</button>
+  </mat-dialog-actions>
+</form>

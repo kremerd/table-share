@@ -1,0 +1,12 @@
+<form *ngrxLet="$; let vm" [formGroup]="vm!.form" (ngSubmit)="submitForm.next()">
+  <h2 mat-dialog-title>Add tokens</h2>
+
+  <mat-dialog-content>
+    Hello World!
+  </mat-dialog-content>
+
+  <mat-dialog-actions>
+    <button type="button" mat-button (click)="cancel.next()">Cancel</button>
+    <button type="submit" mat-button>Proceed</button>
+  </mat-dialog-actions>
+</form>
