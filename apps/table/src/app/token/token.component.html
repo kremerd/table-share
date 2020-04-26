@@ -1,8 +1,8 @@
 <ng-container *ngrxLet="$; let vm">
-  <div class="token" [class.dragged]="vm.dragged"
+  <div class="token" [class.dragged]="vm!.dragged"
     cdkDrag (cdkDragStarted)="dragStart.next($event)" (cdkDragEnded)="dragEnd.next($event)"
-    [cdkDragFreeDragPosition]="vm.token"
+    [cdkDragFreeDragPosition]="vm!.token"
   >
-    <img class="content" [src]="vm.token.image" [alt]="vm.token.name">
+    <img class="content" [src]="vm!.token.image" [alt]="vm!.token.name">
   </div>
 </ng-container>

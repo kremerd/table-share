@@ -1,7 +1,6 @@
 {
   "angularCompilerOptions": {
-    "strictTemplates": true,
-    "strictInputTypes": false
+    "strictTemplates": true
   },
   "compileOnSave": false,
   "compilerOptions": {

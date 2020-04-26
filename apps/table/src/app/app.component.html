@@ -1,7 +1,7 @@
 <div class="page" *ngrxLet="$; let vm">
   <ts-toolbar></ts-toolbar>
   <div class="table">
-    <ts-token *ngFor="let boardItem of vm.boardItems; trackBy: boardItemTracker"
+    <ts-token *ngFor="let boardItem of vm!.boardItems; trackBy: boardItemTracker"
       [token]="boardItem"
     >
     </ts-token>
