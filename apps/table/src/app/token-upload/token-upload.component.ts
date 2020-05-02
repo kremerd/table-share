@@ -5,7 +5,7 @@ import { MAX_FILE_SIZE } from '@table-share/api-interfaces';
 import { Subject } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
 import { addTokenImages } from '../add-tokens/add-tokens.actions';
-import { selectAddTokenGroups, selectAddTokenUploadInProgress } from '../add-tokens/add-tokens.selectors';
+import { selectTokenGroups, selectTokenUploadInProgress } from '../add-tokens/add-tokens.selectors';
 
 export interface ComponentModel {
   disableProceed: boolean;
@@ -32,7 +32,7 @@ export class TokenUploadComponent extends RxState<ComponentModel> {
   constructor(store: Store) {
     super();
 
-    this.connect(store.select(selectAddTokenGroups).pipe(
+    this.connect(store.select(selectTokenGroups).pipe(
       map(tokenGroups => ({ disableProceed: tokenGroups.length === 0 }))
     ))
 
@@ -41,7 +41,7 @@ export class TokenUploadComponent extends RxState<ComponentModel> {
       tap(files => store.dispatch(addTokenImages({ images: files })))
     ));
 
-    this.hold(store.select(selectAddTokenUploadInProgress).pipe(
+    this.hold(store.select(selectTokenUploadInProgress).pipe(
       filter(inProgress => inProgress === false),
       tap(() => this.forward.emit())
     ));

@@ -1,0 +1,13 @@
+.preview-wrapper {
+  min-height: 300px;
+  max-height: calc(65vh - 48px);
+  overflow: hidden;
+}
+
+.preview {
+  display: inline-block;
+}
+
+mat-slider {
+  width: 100%;
+}

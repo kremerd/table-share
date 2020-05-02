@@ -11,13 +11,18 @@ export const addTokenEssentials = createAction(
   props<{ tokenEssentials: TokenEssentials[] }>()
 );
 
+export const setTokenGroupScale = createAction(
+  '[AddTokens] Set token group scale',
+  props<{ scale: number }>()
+);
+
 export const setTokenGroups = createAction(
-  '[BoardItems] Set token groups',
+  '[AddTokens] Set token groups',
   props<{ tokenGroups: TokenGroup[] }>()
 );
 
 export const addTokens = createAction(
-  '[BoardItems] Create tokens',
+  '[AddTokens] Add tokens',
   props<{ tokenGroups: TokenGroup[] }>()
 );
 

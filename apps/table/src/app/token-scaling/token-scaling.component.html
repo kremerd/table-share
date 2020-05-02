@@ -1,14 +1,20 @@
 <ng-container *ngrxLet="$; let vm">
-  <form [formGroup]="$any(form)" (ngSubmit)="forward.next()">
-    <h2 mat-dialog-title>Scale the uploaded token images</h2>
+  <h2 mat-dialog-title>Scale the uploaded token images</h2>
 
-    <mat-dialog-content>
-      <img [src]="vm!.image">
-    </mat-dialog-content>
+  <mat-dialog-content>
+    <div class="preview-wrapper">
+      <div class="preview">
+        <img [src]="vm!.image" style.width="{{ vm!.scale }}%">
+      </div>
+    </div>
+    <mat-slider min="10" max="3000" step="1"
+      [value]="vm!.scale" (input)="sliderInput.next($event)"
+    >
+    </mat-slider>
+  </mat-dialog-content>
 
-    <mat-dialog-actions>
-      <button type="button" mat-button (click)="backward.next()">Back</button>
-      <button type="submit" mat-button>Proceed</button>
-    </mat-dialog-actions>
-  </form>
+  <mat-dialog-actions>
+    <button type="button" mat-button (click)="backward.next()">Back</button>
+    <button type="button" mat-button (click)="forward.next()">Proceed</button>
+  </mat-dialog-actions>
 </ng-container>

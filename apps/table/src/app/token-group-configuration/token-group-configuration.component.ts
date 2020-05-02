@@ -7,7 +7,7 @@ import { ManagedFormArray, selectFormIfValid } from '@table-share/util';
 import { Subject } from 'rxjs';
 import { filter, tap } from 'rxjs/operators';
 import { addTokens, setTokenGroups } from '../add-tokens/add-tokens.actions';
-import { selectAddTokenGroups } from '../add-tokens/add-tokens.selectors';
+import { selectTokenGroups } from '../add-tokens/add-tokens.selectors';
 import { verticalDeflation } from '../animations';
 
 @Component({
@@ -30,11 +30,16 @@ export class TokenGroupConfigurationComponent extends RxState<{}> {
 
   form = new ManagedFormArray<TokenGroup>(() => this.buildFormGroup());
 
-  constructor(private formBuilder: FormBuilder, private store: Store) {
+  constructor(private formBuilder: FormBuilder, store: Store) {
     super();
 
-    this.hold(this.form.valueChanges, (tokenGroups: TokenGroup[]) => this.store.dispatch(setTokenGroups({ tokenGroups })));
-    this.hold(this.store.select(selectAddTokenGroups), tokenGroups => this.form.setValue(tokenGroups, { emitEvent: false }));
+    this.hold(this.form.valueChanges.pipe(
+      tap((tokenGroups: TokenGroup[]) => store.dispatch(setTokenGroups({ tokenGroups })))
+    ));
+
+    this.hold(store.select(selectTokenGroups).pipe(
+      tap(tokenGroups => this.form.setValue(tokenGroups, { emitEvent: false }))
+    ));
 
     this.hold(this.removeTokenAt.pipe(
       tap(index => this.form.removeAt(index)),
@@ -44,7 +49,7 @@ export class TokenGroupConfigurationComponent extends RxState<{}> {
 
     this.hold(this.submitForm.pipe(
       selectFormIfValid<TokenGroup[]>(() => this.form),
-      tap(tokenGroups => this.store.dispatch(addTokens({ tokenGroups }))),
+      tap(tokenGroups => store.dispatch(addTokens({ tokenGroups }))),
       tap(() => this.forward.emit())
     ));
   }
