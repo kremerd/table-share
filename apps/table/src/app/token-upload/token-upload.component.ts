@@ -1,11 +1,13 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { Store } from '@ngrx/store';
 import { RxState } from '@rx-angular/state';
 import { MAX_FILE_SIZE } from '@table-share/api-interfaces';
 import { Subject } from 'rxjs';
-import { filter, mergeMap } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { AddDialogContentMode } from '../add-dialog-content-mode';
-import { FileUploadService } from '../file-upload.service';
+import { addTokenImages } from '../add-tokens/add-tokens.actions';
+import { selectAddTokenUploadInProgress } from '../add-tokens/add-tokens.selectors';
 
 interface ComponentModel {
   form: FormGroup;
@@ -30,16 +32,20 @@ export class TokenUploadComponent extends RxState<ComponentModel> {
 
   readonly MAX_FILE_SIZE = MAX_FILE_SIZE;
 
-  constructor(fileUploadService: FileUploadService) {
+  constructor(store: Store) {
     super();
     this.set({ form: new FormGroup({}) });
 
-    const filesUploaded$ = this.filesSelected.pipe(
-      filter(files => files.length > 0),
-      mergeMap(files => fileUploadService.upload(files))
+    const filesReadyToUpload$ = this.filesSelected.pipe(
+      filter(files => files.length > 0)
     );
 
+    const filesUploaded$ = store.select(selectAddTokenUploadInProgress).pipe(
+      filter(inProgress => inProgress === false)
+    )
+
     this.hold(this.cancel, () => this.closeDialog.emit());
+    this.hold(filesReadyToUpload$, files => store.dispatch(addTokenImages({ images: files })));
     this.hold(filesUploaded$, () => this.switchContentMode.emit('token-group-configuration'));
   }
 

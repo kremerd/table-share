@@ -5,7 +5,9 @@ import { RxState } from '@rx-angular/state';
 import { TokenGroup } from '@table-share/api-interfaces';
 import { removeByIndex, selectFormIfValid } from '@table-share/util';
 import { Subject } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { AddDialogContentMode } from '../add-dialog-content-mode';
+import { selectAddTokenGroups } from '../add-tokens/add-tokens.selectors';
 import { verticalDeflation } from '../animations';
 import { createTokens } from '../board-items/board-items.actions';
 
@@ -28,20 +30,16 @@ export class TokenGroupConfigurationComponent extends RxState<ComponentModel> {
   @Output()
   switchContentMode = new EventEmitter<AddDialogContentMode>();
 
-  private tokenGroups: TokenGroup[] = [
-    { image: 'https://upload.wikimedia.org/wikipedia/commons/4/4f/English_pattern_jack_of_spades.svg', name: 'Jack', amount: 1 },
-    { image: 'https://upload.wikimedia.org/wikipedia/commons/c/ca/English_pattern_queen_of_spades.svg', name: 'Queen', amount: 2 },
-    { image: 'https://upload.wikimedia.org/wikipedia/commons/f/f1/English_pattern_king_of_spades.svg', name: 'King', amount: 3 }
-  ];
-
   cancel = new Subject<void>();
   removeTokenAt = new Subject<number>();
   submitForm = new Subject<void>();
 
   constructor(private formBuilder: FormBuilder, private store: Store) {
     super();
-    this.set({ form: this.buildForm(this.tokenGroups) });
 
+    this.connect(this.store.select(selectAddTokenGroups).pipe(
+      map(tokenGroups => ({ form: this.buildForm(tokenGroups) }))
+    ));
     this.connect(this.removeTokenAt, (vm, index) => {
       const controls = removeByIndex(vm.form.controls, index);
       return { form: this.formBuilder.array(controls) };

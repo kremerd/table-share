@@ -17,6 +17,8 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { SocketIoModule } from 'ngx-socket-io';
 import { environment } from '../environments/environment';
 import { AddDialogComponent } from './add-dialog/add-dialog.component';
+import { AddTokensEffects } from './add-tokens/add-tokens.effects';
+import { addTokensReducer } from './add-tokens/add-tokens.reducer';
 import { AppComponent } from './app.component';
 import { BoardItemsEffects } from './board-items/board-items.effects';
 import { boardItemsReducer } from './board-items/board-items.reducer';
@@ -43,6 +45,7 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
     BrowserModule,
     DragDropModule,
     EffectsModule.forRoot([
+      AddTokensEffects,
       BoardItemsEffects
     ]),
     HttpClientModule,
@@ -56,6 +59,7 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
     ReactiveFormsModule,
     SocketIoModule.forRoot({ url: environment.wsRoot }),
     StoreModule.forRoot({
+      addTokens: addTokensReducer,
       boardItems: boardItemsReducer
     }),
     StoreDevtoolsModule.instrument({ maxAge: 25 })
