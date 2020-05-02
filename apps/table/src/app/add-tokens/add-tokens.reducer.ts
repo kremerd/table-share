@@ -1,6 +1,6 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { TokenGroup } from '@table-share/api-interfaces';
-import { addTokenEssentials, addTokenImages } from './add-tokens.actions';
+import { addTokenEssentials, addTokenImages, resetTokenCreation } from './add-tokens.actions';
 
 export interface AddTokensState {
   tokenGroups: TokenGroup[];
@@ -20,7 +20,9 @@ export const reducer = createReducer<AddTokensState>({ tokenGroups: [], uploadIn
       ...tokenEssentials.map(tokenEssential => ({ ...tokenEssential, amount: 1 }))
     ],
     uploadInProgress: false
-  }))
+  })),
+
+  on(resetTokenCreation, _ => ({ tokenGroups: [], uploadInProgress: false }))
 
 );
 

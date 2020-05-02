@@ -10,3 +10,7 @@ export const addTokenEssentials = createAction(
   '[AddTokens] Add token essentials',
   props<{ tokenEssentials: TokenEssentials[] }>()
 );
+
+export const resetTokenCreation = createAction(
+  '[AddTokens] Reset token creation'
+)
