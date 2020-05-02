@@ -1,12 +1,17 @@
 <ng-container *ngrxLet="$; let vm" [ngSwitch]="vm!.contentMode">
   <ts-token-upload *ngSwitchCase="'token-upload'"
-    (closeDialog)="closeDialog.next()"
-    (switchContentMode)="switchContentMode.next($event)"
+    (backward)="closeDialog.next()"
+    (forward)="switchContentMode.next('token-scaling')"
   >
   </ts-token-upload>
+  <ts-token-scaling *ngSwitchCase="'token-scaling'"
+    (backward)="switchContentMode.next('token-upload')"
+    (forward)="switchContentMode.next('token-group-configuration')"
+  >
+  </ts-token-scaling>
   <ts-token-group-configuration *ngSwitchCase="'token-group-configuration'"
-    (closeDialog)="closeDialog.next($event)"
-    (switchContentMode)="switchContentMode.next($event)"
+    (backward)="switchContentMode.next('token-scaling')"
+    (forward)="closeDialog.next()"
   >
   </ts-token-group-configuration>
 </ng-container>

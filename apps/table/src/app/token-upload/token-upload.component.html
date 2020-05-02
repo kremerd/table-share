@@ -8,6 +8,7 @@
   </mat-dialog-content>
 
   <mat-dialog-actions>
-    <button type="button" mat-button (click)="cancel.next()">Cancel</button>
+    <button type="button" mat-button (click)="backward.next()">Cancel</button>
+    <button type="button" mat-button (click)="forward.next()" [disabled]="vm!.disableProceed">Proceed</button>
   </mat-dialog-actions>
 </ng-container>

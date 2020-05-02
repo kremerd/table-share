@@ -7,7 +7,7 @@ import { AddDialogContentMode } from '../add-dialog-content-mode';
 import { resetTokenCreation } from '../add-tokens/add-tokens.actions';
 
 interface ComponentModel {
-  contentMode: 'token-upload' | 'token-group-configuration';
+  contentMode: AddDialogContentMode;
 }
 
 @Component({

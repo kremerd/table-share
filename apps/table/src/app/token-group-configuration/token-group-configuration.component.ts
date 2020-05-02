@@ -5,7 +5,7 @@ import { RxState } from '@rx-angular/state';
 import { TokenGroup } from '@table-share/api-interfaces';
 import { ManagedFormArray, selectFormIfValid } from '@table-share/util';
 import { Subject } from 'rxjs';
-import { AddDialogContentMode } from '../add-dialog-content-mode';
+import { filter, tap } from 'rxjs/operators';
 import { addTokens, setTokenGroups } from '../add-tokens/add-tokens.actions';
 import { selectAddTokenGroups } from '../add-tokens/add-tokens.selectors';
 import { verticalDeflation } from '../animations';
@@ -20,12 +20,11 @@ import { verticalDeflation } from '../animations';
 export class TokenGroupConfigurationComponent extends RxState<{}> {
 
   @Output()
-  closeDialog = new EventEmitter<void>();
+  backward = new EventEmitter<void>();
 
   @Output()
-  switchContentMode = new EventEmitter<AddDialogContentMode>();
+  forward = new EventEmitter<void>();
 
-  cancel = new Subject<void>();
   removeTokenAt = new Subject<number>();
   submitForm = new Subject<void>();
 
@@ -34,17 +33,20 @@ export class TokenGroupConfigurationComponent extends RxState<{}> {
   constructor(private formBuilder: FormBuilder, private store: Store) {
     super();
 
-    const submitValidForm$ = this.submitForm.pipe(
-      selectFormIfValid<TokenGroup[]>(() => this.form)
-    );
-
     this.hold(this.form.valueChanges, (tokenGroups: TokenGroup[]) => this.store.dispatch(setTokenGroups({ tokenGroups })));
     this.hold(this.store.select(selectAddTokenGroups), tokenGroups => this.form.setValue(tokenGroups, { emitEvent: false }));
-    this.hold(this.removeTokenAt, index => this.form.removeAt(index));
 
-    this.hold(this.cancel, () => this.switchContentMode.emit('token-upload'));
-    this.hold(submitValidForm$, tokenGroups => this.store.dispatch(addTokens({ tokenGroups })));
-    this.hold(submitValidForm$, () => this.closeDialog.emit());
+    this.hold(this.removeTokenAt.pipe(
+      tap(index => this.form.removeAt(index)),
+      filter(() => this.form.length === 0),
+      tap(() => this.backward.emit())
+    ));
+
+    this.hold(this.submitForm.pipe(
+      selectFormIfValid<TokenGroup[]>(() => this.form),
+      tap(tokenGroups => this.store.dispatch(addTokens({ tokenGroups }))),
+      tap(() => this.forward.emit())
+    ));
   }
 
   private buildFormGroup(): FormGroup {
