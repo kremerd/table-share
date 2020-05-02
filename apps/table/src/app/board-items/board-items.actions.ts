@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { BoardItem, TokenGroup } from '@table-share/api-interfaces';
+import { BoardItem } from '@table-share/api-interfaces';
 
 export const loadBoardItems = createAction(
   '[BoardItems] Load'
@@ -24,8 +24,3 @@ export const deleteBoardItem = createAction(
   '[BoardItems] Delete',
   props<{ boardItemId: number }>()
 );
-
-export const createTokens = createAction(
-  '[BoardItems] Create tokens',
-  props<{ tokenGroups: TokenGroup[] }>()
-)
