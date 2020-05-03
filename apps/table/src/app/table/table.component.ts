@@ -1,14 +1,16 @@
 import { Point } from '@angular/cdk/drag-drop/drag-ref';
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, NgZone, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, Inject, NgZone, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { RxState } from '@rx-angular/state';
 import { BoardItem } from '@table-share/api-interfaces';
 import { fromEvent } from 'rxjs';
 import { filter, map, mapTo, tap } from 'rxjs/operators';
 import { selectBoardItems } from '../board-items/board-items.selectors';
+import { WINDOW } from '../window-provider';
 
 interface ComponentModel {
   boardItems: BoardItem[];
+  preventNextContextMenu: boolean;
   translation: Point;
   translationInProgress: Point | null;
 }
@@ -24,9 +26,14 @@ export class TableComponent extends RxState<ComponentModel> implements AfterView
   @ViewChild('table')
   tableElement!: ElementRef<HTMLDivElement>;
 
-  constructor(private ngZone: NgZone, store: Store) {
+  constructor(private ngZone: NgZone, store: Store, @Inject(WINDOW) private window: Window) {
     super();
-    this.set({ translation: { x: 0, y: 0 } });
+    this.set({
+      boardItems: [],
+      preventNextContextMenu: false,
+      translation: { x: 0, y: 0 },
+      translationInProgress: null
+    });
 
     this.connect(store.pipe(
       select(selectBoardItems),
@@ -37,27 +44,29 @@ export class TableComponent extends RxState<ComponentModel> implements AfterView
   ngAfterViewInit(): void {
     this.ngZone.runOutsideAngular(() => {
       const table = this.tableElement.nativeElement;
-      this.setupMouseEvents(table);
+      this.setupPointerEvents(table);
     });
   }
 
   /**
-   * Mouse events for board translation are handled in the `capture` phase to prevent
+   * Pointer events for board translation are handled in the `capture` phase to prevent
    * interference from drag and drop handlers of the board items.
    * To show off we also run them outside the Angular zone :).
    */
-  private setupMouseEvents(table: HTMLDivElement): void {
-    this.connect(fromEvent<MouseEvent>(table, 'mousedown', { capture: true }).pipe(
+  private setupPointerEvents(table: HTMLDivElement): void {
+    this.connect(fromEvent<PointerEvent>(table, 'pointerdown', { capture: true }).pipe(
       filter(event => event.button === 2),
+      tap(event => table.setPointerCapture(event.pointerId)),
       map(({ x, y }) => ({ translationInProgress: { x, y } }))
     ));
 
-    this.connect(fromEvent<MouseEvent>(table, 'mousemove', { capture: true }), (vm, event) => {
+    this.connect(fromEvent<PointerEvent>(table, 'pointermove', { capture: true }), (vm, event) => {
       if (!vm.translationInProgress) {
         return {};
       }
 
       return {
+        preventNextContextMenu: true,
         translationInProgress: {
           x: event.x,
           y: event.y
@@ -69,14 +78,19 @@ export class TableComponent extends RxState<ComponentModel> implements AfterView
       }
     });
 
-    this.connect(fromEvent<MouseEvent>(table, 'mouseup', { capture: true }).pipe(
+    this.connect(fromEvent<PointerEvent>(table, 'pointerup', { capture: true }).pipe(
       filter(event => event.button === 2),
+      tap(event => table.releasePointerCapture(event.pointerId)),
       mapTo({ translationInProgress: null })
     ));
 
-    this.hold(fromEvent<MouseEvent>(table, 'contextmenu', { capture: true }).pipe(
-      tap(event => event.preventDefault())
-    ));
+    this.connect(fromEvent<MouseEvent>(this.window, 'contextmenu'), (vm, event) => {
+      if (vm.preventNextContextMenu) {
+        event.preventDefault();
+      }
+
+      return { preventNextContextMenu: false };
+    });
   }
 
   boardItemTracker(index: number, boardItem: BoardItem): number {
