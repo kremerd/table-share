@@ -1,9 +1,9 @@
 import { Point } from '@angular/cdk/drag-drop/drag-ref';
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, Inject, NgZone, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, Inject, Input, NgZone, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { RxState } from '@rx-angular/state';
 import { BoardItem } from '@table-share/api-interfaces';
-import { fromEvent } from 'rxjs';
+import { fromEvent, Observable } from 'rxjs';
 import { filter, map, mapTo, tap } from 'rxjs/operators';
 import { selectBoardItems } from '../board-items/board-items.selectors';
 import { WINDOW } from '../window-provider';
@@ -23,6 +23,13 @@ interface ComponentModel {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TableComponent extends RxState<ComponentModel> implements AfterViewInit {
+
+  @Input()
+  set resetNavigation$(resetNavigation$: Observable<void>) {
+    this.connect(resetNavigation$.pipe(
+      mapTo({ scale: 1, translation: { x: 0, y: 0 } })
+    ));
+  }
 
   @ViewChild('table')
   tableElement!: ElementRef<HTMLDivElement>;

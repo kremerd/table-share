@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveComponentModule } from '@ngrx/component';
@@ -62,6 +63,7 @@ import { WindowProvider } from './window-provider';
     MatInputModule,
     MatSliderModule,
     MatToolbarModule,
+    MatTooltipModule,
     ReactiveComponentModule,
     ReactiveFormsModule,
     SocketIoModule.forRoot({ url: environment.wsRoot }),

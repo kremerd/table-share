@@ -18,6 +18,12 @@ ts-table {
   height: 100%;
 }
 
+.reset-navigation-button {
+  position: absolute;
+  right: 16px;
+  top: #{64 + 16}px;
+}
+
 .add-button {
   position: absolute;
   right: 16px;

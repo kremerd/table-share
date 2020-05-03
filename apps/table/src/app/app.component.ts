@@ -15,12 +15,13 @@ import { loadBoardItems } from './board-items/board-items.actions';
 })
 export class AppComponent extends RxState<{}> implements OnInit {
 
-  addClick = new Subject<void>();
+  resetNavigation = new Subject<void>();
+  addBoardItem = new Subject<void>();
 
   constructor(private dialog: MatDialog, private store: Store) {
     super();
 
-    this.hold(this.addClick, () => this.openAddDialog());
+    this.hold(this.addBoardItem, () => this.openAddDialog());
   }
 
   private openAddDialog(): MatDialogRef<AddDialogComponent> {

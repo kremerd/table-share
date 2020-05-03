@@ -1,8 +1,19 @@
 <div class="page">
   <ts-toolbar></ts-toolbar>
   <div class="workspace">
-    <ts-table></ts-table>
-    <button class="add-button" mat-fab aria-label="Add board item" (click)="addClick.next()">
+    <ts-table [resetNavigation$]="resetNavigation"></ts-table>
+    <button class="reset-navigation-button" mat-fab color="primary"
+      matTooltip="Reset table navigation" matTooltipPosition="left"
+      aria-label="Reset table navigation"
+      (click)="resetNavigation.next()"
+    >
+      <mat-icon>aspect_ratio</mat-icon>
+    </button>
+    <button class="add-button" mat-fab color="accent"
+      [matTooltip]="'Add board item'" matTooltipPosition="left"
+      aria-label="Add board item"
+      (click)="addBoardItem.next()"
+    >
       <mat-icon>add</mat-icon>
     </button>
   </div>
