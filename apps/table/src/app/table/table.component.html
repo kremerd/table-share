@@ -1,13 +1,6 @@
 <ng-container *ngrxLet="$; let vm">
-  <div class="table-wrapper" [class.translation-in-progress]="vm!.moveInProgress"
-    (mousedown)="mouseDown.next($event)"
-    (mousemove)="mouseMove.next($event)"
-    (mouseup)="mouseUp.next($event)"
-    (contextmenu)="contextMenu.next($event)"
-  >
-    <div class="table"
-      style.transform="translate({{ vm!.translation.x }}px, {{ vm!.translation.y }}px)"
-    >
+  <div class="table" [class.translation-in-progress]="vm!.translationInProgress" #table>
+    <div class="canvas" style.transform="translate({{ vm!.translation.x }}px, {{ vm!.translation.y }}px)">
       <ts-token *ngFor="let boardItem of vm!.boardItems; trackBy: boardItemTracker"
         [token]="boardItem"
       >
