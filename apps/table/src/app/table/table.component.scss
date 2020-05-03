@@ -1,4 +1,12 @@
+.table-wrapper {
+  height: 100%;
+}
+
 .table {
   position: relative;
   height: 100%;
+}
+
+.translation-in-progress {
+  cursor: all-scroll;
 }
