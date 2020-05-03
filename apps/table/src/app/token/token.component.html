@@ -3,6 +3,9 @@
     cdkDrag (cdkDragStarted)="dragStart.next($event)" (cdkDragEnded)="dragEnd.next($event)"
     [cdkDragFreeDragPosition]="vm!.token"
   >
-    <img class="content" [src]="vm!.token.image" [alt]="vm!.token.name">
+    <img class="image"
+      [src]="vm!.token.image" [alt]="vm!.token.name"
+      style.width="{{ vm!.token.scale }}%"
+    >
   </div>
 </ng-container>

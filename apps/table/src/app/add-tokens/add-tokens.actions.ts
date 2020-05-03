@@ -23,7 +23,7 @@ export const setTokenGroups = createAction(
 
 export const addTokens = createAction(
   '[AddTokens] Add tokens',
-  props<{ tokenGroups: TokenGroup[] }>()
+  props<{ scale: number, tokenGroups: TokenGroup[] }>()
 );
 
 export const resetTokenCreation = createAction(

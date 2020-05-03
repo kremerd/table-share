@@ -6,7 +6,7 @@ import { TokenGroup } from '@table-share/api-interfaces';
 import { ManagedFormArray, selectFormIfValid } from '@table-share/util';
 import { Subject } from 'rxjs';
 import { filter, tap } from 'rxjs/operators';
-import { addTokens, setTokenGroups } from '../add-tokens/add-tokens.actions';
+import { setTokenGroups } from '../add-tokens/add-tokens.actions';
 import { selectTokenGroups } from '../add-tokens/add-tokens.selectors';
 import { verticalDeflation } from '../animations';
 
@@ -49,7 +49,6 @@ export class TokenGroupConfigurationComponent extends RxState<{}> {
 
     this.hold(this.submitForm.pipe(
       selectFormIfValid<TokenGroup[]>(() => this.form),
-      tap(tokenGroups => store.dispatch(addTokens({ tokenGroups }))),
       tap(() => this.forward.emit())
     ));
   }

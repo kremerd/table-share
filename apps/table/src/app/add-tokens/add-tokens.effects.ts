@@ -25,11 +25,12 @@ export class AddTokensEffects {
 
   createTokens$ = createEffect(() => this.actions$.pipe(
     ofType(addTokens),
-    map(({ tokenGroups }) => tokenGroups
+    map(({ scale, tokenGroups }) => tokenGroups
       .map(({ name, image, amount }) => Array<TokenEssentials>(amount).fill({ name, image }))
       .flat()
       .map((essentials, i): Token => ({
         type: 'token',
+        scale,
         id: generateRandomId(),
         x: 30 * i,
         y: 30 * i,

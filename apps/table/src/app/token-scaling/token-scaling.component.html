@@ -3,8 +3,10 @@
 
   <mat-dialog-content>
     <div class="preview-wrapper">
-      <div class="preview">
-        <img [src]="vm!.image" style.width="{{ vm!.scale }}%">
+      <div class="preview-canvas">
+        <div class="preview-element">
+          <img [src]="vm!.image" style.width="{{ vm!.scale }}%">
+        </div>
       </div>
     </div>
     <mat-slider min="0" max="100" step="1" [value]="vm!.sliderValue"

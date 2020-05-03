@@ -4,7 +4,11 @@
   overflow: hidden;
 }
 
-.preview {
+.preview-canvas {
+  width: 10000px;
+}
+
+.preview-element {
   display: inline-block;
 }
 

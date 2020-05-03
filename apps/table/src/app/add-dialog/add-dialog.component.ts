@@ -3,8 +3,10 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { RxState } from '@rx-angular/state';
 import { Subject } from 'rxjs';
+import { map, switchMapTo, take, tap } from 'rxjs/operators';
 import { AddDialogContentMode } from '../add-dialog-content-mode';
-import { resetTokenCreation } from '../add-tokens/add-tokens.actions';
+import { addTokens, resetTokenCreation } from '../add-tokens/add-tokens.actions';
+import { selectAddTokens } from '../add-tokens/add-tokens.selectors';
 
 interface ComponentModel {
   contentMode: AddDialogContentMode;
@@ -18,17 +20,30 @@ interface ComponentModel {
 })
 export class AddDialogComponent extends RxState<ComponentModel> {
 
-  closeDialog = new Subject<void>();
+  cancel = new Subject<void>();
   switchContentMode = new Subject<AddDialogContentMode>();
+  complete = new Subject<void>();
 
   constructor(dialog: MatDialogRef<AddDialogComponent>, store: Store) {
     super();
     this.set({ contentMode: 'token-upload' });
     store.dispatch(resetTokenCreation());
 
-    this.connect(this.switchContentMode, (_, contentMode) => ({ contentMode }));
+    this.connect(this.switchContentMode.pipe(
+      map(contentMode => ({ contentMode }))
+    ));
 
-    this.hold(this.closeDialog, () => dialog.close());
+    this.hold(this.cancel.pipe(
+      tap(() => dialog.close())
+    ));
+
+    this.hold(this.complete.pipe(
+      switchMapTo(store.select(selectAddTokens).pipe(take(1))),
+      tap(({ scale, tokenGroups }) => {
+        store.dispatch(addTokens({ scale, tokenGroups }));
+        dialog.close();
+      })
+    ));
   }
 
 }
