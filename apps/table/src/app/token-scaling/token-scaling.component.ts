@@ -10,6 +10,7 @@ import { selectTokenGroups, selectTokenGroupScale } from '../add-tokens/add-toke
 export interface ComponentModel {
   image: string;
   scale: number;
+  sliderValue: number;
 }
 
 @Component({
@@ -36,12 +37,12 @@ export class TokenScalingComponent extends RxState<ComponentModel> {
     ));
 
     this.connect(store.select(selectTokenGroupScale).pipe(
-      map(scale => ({ scale }))
+      map(scale => ({ scale, sliderValue: this.transformToSliderValue(scale) }))
     ));
 
     this.hold(this.sliderInput.pipe(
       throttleTime(10),
-      tap(event => store.dispatch(setTokenGroupScale({ scale: event.value ?? 100 })))
+      tap(event => store.dispatch(setTokenGroupScale({ scale: this.transformToScale(event.value) })))
     ));
 
     this.hold(store.select(selectTokenGroups).pipe(
@@ -49,6 +50,18 @@ export class TokenScalingComponent extends RxState<ComponentModel> {
       delay(0),
       tap(() => this.backward.emit())
     ));
+  }
+
+  private transformToSliderValue(scale: number): number {
+    return (Math.log(scale / 100) / 3 + 1) * 50;
+  }
+
+  private transformToScale(sliderValue: number | null): number {
+    if (sliderValue === null) {
+      return 100;
+    }
+
+    return Math.exp((sliderValue / 50 - 1) * 3) * 100;
   }
 
 }

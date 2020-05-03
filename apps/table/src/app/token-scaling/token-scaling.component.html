@@ -7,8 +7,8 @@
         <img [src]="vm!.image" style.width="{{ vm!.scale }}%">
       </div>
     </div>
-    <mat-slider min="10" max="3000" step="1"
-      [value]="vm!.scale" (input)="sliderInput.next($event)"
+    <mat-slider min="0" max="100" step="1" [value]="vm!.sliderValue"
+      (input)="sliderInput.next($event)"
     >
     </mat-slider>
   </mat-dialog-content>
