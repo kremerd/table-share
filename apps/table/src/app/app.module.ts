@@ -30,6 +30,7 @@ import { TokenScalingComponent } from './token-scaling/token-scaling.component';
 import { TokenUploadComponent } from './token-upload/token-upload.component';
 import { TokenComponent } from './token/token.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
+import { WindowProvider } from './window-provider';
 
 @NgModule({
   declarations: [
@@ -68,7 +69,9 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
     }),
     StoreDevtoolsModule.instrument({ maxAge: 25 })
   ],
-  providers: [],
+  providers: [
+    WindowProvider
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

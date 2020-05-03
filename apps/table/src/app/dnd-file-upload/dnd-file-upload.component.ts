@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, Input, Output } from '@angular/core';
 import { RxState } from '@rx-angular/state';
 import { fileListToArray } from '@table-share/util';
-import { merge, Subject } from 'rxjs';
+import { fromEvent, merge, Subject } from 'rxjs';
 import { distinctUntilChanged, filter, map, mapTo, scan, withLatestFrom } from 'rxjs/operators';
+import { WINDOW } from '../window-provider';
 
 interface ComponentModel {
   dragOver: boolean;
@@ -32,7 +33,7 @@ export class DndFileUploadComponent extends RxState<ComponentModel> {
   dragOver = new Subject<DragEvent>();
   drop = new Subject<DragEvent>();
 
-  constructor() {
+  constructor(@Inject(WINDOW) window: Window) {
     super();
     this.set({ dragOver: false, files: [], maxSize: 1024 });
 
@@ -65,7 +66,7 @@ export class DndFileUploadComponent extends RxState<ComponentModel> {
     this.connect(dropSuccess$);
     this.connect(successfullDrop$);
 
-    this.hold(merge(this.dragOver, this.drop), event => event.preventDefault());
+    this.hold(merge(fromEvent(window, 'dragover'), fromEvent(window, 'drop')), event => event.preventDefault());
   }
 
 }
