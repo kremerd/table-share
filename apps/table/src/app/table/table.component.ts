@@ -11,6 +11,7 @@ import { WINDOW } from '../window-provider';
 interface ComponentModel {
   boardItems: BoardItem[];
   preventNextContextMenu: boolean;
+  scale: number;
   translation: Point;
   translationInProgress: Point | null;
 }
@@ -31,6 +32,7 @@ export class TableComponent extends RxState<ComponentModel> implements AfterView
     this.set({
       boardItems: [],
       preventNextContextMenu: false,
+      scale: 1,
       translation: { x: 0, y: 0 },
       translationInProgress: null
     });
@@ -60,7 +62,7 @@ export class TableComponent extends RxState<ComponentModel> implements AfterView
       map(({ x, y }) => ({ translationInProgress: { x, y } }))
     ));
 
-    this.connect(fromEvent<PointerEvent>(table, 'pointermove', { capture: true }), (vm, event) => {
+    this.connect(fromEvent<PointerEvent>(table, 'pointermove', { capture: true }), (vm, event: PointerEvent) => {
       if (!vm.translationInProgress) {
         return {};
       }
@@ -84,13 +86,17 @@ export class TableComponent extends RxState<ComponentModel> implements AfterView
       mapTo({ translationInProgress: null })
     ));
 
-    this.connect(fromEvent<MouseEvent>(this.window, 'contextmenu'), (vm, event) => {
+    this.connect(fromEvent<MouseEvent>(this.window, 'contextmenu'), (vm, event: MouseEvent) => {
       if (vm.preventNextContextMenu) {
         event.preventDefault();
       }
 
       return { preventNextContextMenu: false };
     });
+
+    this.connect(fromEvent<WheelEvent>(table, 'wheel'), (vm, event: WheelEvent) => ({
+      scale: vm.scale * (1 - event.deltaY * 0.01)
+    }));
   }
 
   boardItemTracker(index: number, boardItem: BoardItem): number {
