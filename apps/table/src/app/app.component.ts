@@ -1,17 +1,11 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { select, Store } from '@ngrx/store';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import { Store } from '@ngrx/store';
 import { RxState } from '@rx-angular/state';
-import { BoardItem } from '@table-share/api-interfaces';
 import { Subject } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { AddDialogComponent } from './add-dialog/add-dialog.component';
 import { loadBoardItems } from './board-items/board-items.actions';
-import { selectBoardItems } from './board-items/board-items.selectors';
 
-interface ComponentModel {
-  boardItems: BoardItem[];
-}
 
 @Component({
   selector: 'ts-root',
@@ -19,36 +13,28 @@ interface ComponentModel {
   styleUrls: ['./app.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppComponent extends RxState<ComponentModel> implements OnInit {
+export class AppComponent extends RxState<{}> implements OnInit {
 
   addClick = new Subject<void>();
 
   constructor(private dialog: MatDialog, private store: Store) {
     super();
 
-    this.connect(store.pipe(
-      select(selectBoardItems),
-      map(boardItems => ({ boardItems }))
-    ));
-
     this.hold(this.addClick, () => this.openAddDialog());
   }
 
   private openAddDialog(): MatDialogRef<AddDialogComponent> {
-    const dialogConfig = {
+    const dialogConfig: MatDialogConfig = {
       ariaLabel: 'Add tokens to the table',
-      width: '600px',
-      position: { top: '70px' }
+      disableClose: true,
+      position: { top: '70px' },
+      width: '600px'
     };
     return this.dialog.open(AddDialogComponent, dialogConfig);
   }
 
   ngOnInit(): void {
     this.store.dispatch(loadBoardItems());
-  }
-
-  boardItemTracker(index: number, boardItem: BoardItem): number {
-    return boardItem.id;
   }
 
 }

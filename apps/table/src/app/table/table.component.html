@@ -1,0 +1,6 @@
+<div class="table" *ngrxLet="$; let vm">
+  <ts-token *ngFor="let boardItem of vm!.boardItems; trackBy: boardItemTracker"
+    [token]="boardItem"
+  >
+  </ts-token>
+</div>
